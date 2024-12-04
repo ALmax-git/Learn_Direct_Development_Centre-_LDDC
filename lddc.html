@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LDDC Structure Hierarchy</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+            overflow: hidden;
+        }
+
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        svg {
+            display: block;
+            margin: auto;
+            padding: 20px;
+            overflow: visible;
+        }
+
+        .node circle {
+            fill: #69b3a2;
+            cursor: pointer;
+            transition: fill 0.3s ease, r 0.3s ease;
+        }
+
+        .node circle:hover {
+            fill: #ff7f50;
+            r: 10;
+        }
+
+        .node text {
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            fill: white;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 2px;
+        }
+
+        #tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            pointer-events: none;
+            font-size: 12px;
+            display: none;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+</head>
+<body>
+    <canvas id="background-canvas"></canvas>
+    <h1 style="text-align: center; color: white;">Learn Direct Development Centre (LDDC) Structure</h1>
+    <div class="container-fluid" style="background-color:rgba(0, 0, 0, 0.9); marging:100px; border-radius:10px; border:2px double green;">
+      <svg id="tree" ></svg>
+    </div>
+
+    <div id="tooltip"></div>
+
+    <script>
+        // Background Matrix Animation
+        const canvas = document.getElementById("background-canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+
+            drops.forEach((y, index) => {
+                const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                const x = index * fontSize;
+                ctx.fillText(text, x, y * fontSize);
+
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[index] = 0;
+                }
+                drops[index]++;
+            });
+        }
+        setInterval(drawMatrix, 50);
+
+        // Hierarchical Data
+        const data = {
+            name: "Program",
+            children: [
+                {
+                    name: "Life Skills & Technical Training",
+                    description: "Empowering individuals with essential life skills and technical expertise for self-reliance and sustainable livelihoods.",
+                    children: [
+                        { name: "Tie & Dye, Tailoring, Bead Work", description: "Learn creative and high-demand craftsmanship techniques to produce vibrant textiles, elegant fashion, and decorative accessories." },
+                        { name: "Carpentry, Plumbing, Masonry", description: "Acquire practical skills in structural craftsmanship, essential building repairs, and architectural enhancements." },
+                        { name: "Catering, Bread-Making, Cooking Oil Production", description: "Master the art of food preparation and production for personal and business growth." },
+                        { name: "Perfumes, Cotton Wool Manufacturing", description: "Discover the processes behind creating quality consumer goods with local and scalable production methods." }
+                    ]
+                },
+                {
+                    name: "Computer Basics",
+                    description: "Building foundational skills in computing to enable confidence and competence in the digital world.",
+                    children: [
+                        { name: "Computer Literacy", description: "Gain hands-on experience with basic computer operations, file management, and everyday tasks." },
+                        { name: "Basic Networking", description: "Understand the fundamentals of connecting computers and devices for seamless communication." },
+                        { name: "Word Processing and Spreadsheets", description: "Develop proficiency in creating, editing, and managing professional documents and data sheets." },
+                        { name: "Internet Safety & Productivity", description: "Learn to navigate the internet securely while maximizing productivity through online tools and resources." }
+                    ]
+                },
+                {
+                    name: "IT",
+                    description: "Develop advanced technical capabilities to excel in today's fast-evolving tech landscape.",
+                    children: [
+                        { name: "Web Development", description: "Design, develop, and deploy engaging and interactive websites and web applications." },
+                        { name: "Linux Fundamentals", description: "Understand and work with Linux systems, including file structures, commands, and basic configurations." },
+                        { name: "Programming", description: "Learn modern programming languages and techniques to build efficient and innovative software solutions." },
+                        { name: "Database Administration", description: "Acquire skills to manage, maintain, and optimize relational and non-relational database systems." },
+                        { name: "System Administration", description: "Master the art of installing, configuring, and managing operating systems and IT infrastructure." }
+                    ]
+                },
+                {
+                 name: "Traineeship and Apprenticeship",
+                 description: "Gain real-world work experience through structured traineeships and apprenticeships in various fields.",
+                 children: [
+                     {
+                         name: "Traineeship",
+                         description: "Taking the first step into work can be daunting, especially if you don’t have much work experience. A Traineeship is a great way to kick start your career. You’ll gain the experience employers are looking for in a period of 6 months as well as the skills and confidence to progress into a paid Apprenticeship, into work, or onto further education.",
+                         details: [
+                             { title: "What happens when I start a Traineeship?", content: "It’s great that you’ve taken that first exciting step into work. Once you’ve visited our learning centre and met our friendly staff, we’ll talk to you about what type of job you’re interested in, your current skills and experience, so we can get an idea of the courses and support you may need. You’ll be given a personalised learning plan that’ll show you what you’ll be learning over the next few weeks." },
+                             { title: "What will I do on my Traineeship?", content: "Your Traineeship is made up of time spent learning in our centres and the opportunity to get work experience with a local employer. The learning you’ll get from us in our centres will really help you to develop the skills that will prepare you for the workplace. Your work placement is a great opportunity for you to get practical work experience. You’ll understand what it’s like to be in a work environment and gain the confidence and skills that you can take into any job." },
+                             { title: "Skills You’ll Learn During Your Traineeship", content: [
+                                 "Write an effective CV and covering letter: Learn how to create a professional CV and tailor a covering letter to match job roles.",
+                                 "Prepare for a job interview: Develop confidence and skills for successful job interviews.",
+                                 "Fill in job application forms: Understand how to fill in job application forms with accuracy and attention to detail."
+                             ] },
+                             { title: "What help and support will I get?", content: "We’ll support you every step of the way. You’ll have help with finding an employer to do your work placement with. If you’re aged between 16 and 18, you’ll have one to one support from a dedicated Young Persons Coach who’ll be on hand to answer any questions you have. Once you’ve completed a minimum of six weeks in your placement, we’ll support you with the next step in your career, whether that’s progressing onto an Apprenticeship, into work, or onto further learning." },
+                             { title: "What happens after I complete my Traineeship?", content: "With the new skills you’ve learnt and the work experience you’ve gained, you’ll now be ready to move onto a paid Apprenticeship, into work, or onto further learning. We can help find the right one for you. We’ll show you what vacancies are available, help you to update your CV to include the work experience you’ve gained during your Traineeship, and support you in your applications in finding a job or Apprenticeship to suit you." },
+                             { title: "Do I have to pay anything?", content: "Traineeship is funded by the government so there is no cost to you. You may also be eligible to get some additional financial support to cover costs if you’re finding it difficult to start or complete your learning. Talk to staff at the center to guide you." },
+                             { title: "Am I suitable for a Traineeship?", content: "The entry requirements for a Traineeship depend on your age.\nIf you’re aged between 16 and 18, you must:\n– be currently unemployed\n– have little or no work experience\n– be aged 16-18 and qualified below level 3\nIf you’re aged between 19 and 24, you must:\n– be currently unemployed, working fewer than 16 hours a week, or earning less than the minimum wage a month\n– have little or no work experience already\n– be aged 19-24 and qualified below level 3" }
+                         ]
+                     },
+                     { name: "Apprenticeship", description: "Progress from a traineeship into a paid apprenticeship to further develop your skills and career prospects." }
+                 ]
+             }
+            
+
+            ]
+        };
+
+        // Tree Setup
+        const width = 960;
+        const height = 600;
+
+        const svg = d3.select("#tree")
+            .attr("width", width)
+            .attr("height", height);
+
+        const tree = d3.tree().size([height - 100, width - 200]);
+        const root = d3.hierarchy(data);
+        tree(root);
+
+        // Links
+        svg.selectAll(".link")
+            .data(root.links())
+            .enter()
+            .append("path")
+            .attr("class", "link")
+            .attr("d", d3.linkHorizontal()
+                .x(d => d.y)
+                .y(d => d.x));
+
+        // Nodes
+        const nodes = svg.selectAll(".node")
+            .data(root.descendants())
+            .enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", d => `translate(${d.y},${d.x})`);
+
+        nodes.append("circle")
+            .attr("r", 6)
+            .on("mouseover", function () {
+                d3.select(this).attr("r", 10);
+                const { data } = d3.select(this.parentNode).datum();
+                d3.select("#tooltip")
+                    .style("left", d3.event.pageX + 10 + "px")
+                    .style("top", d3.event.pageY - 10 + "px")
+                    .style("display", "block")
+                    .text(data.description || data.name);
+            })
+            .on("mouseout", function () {
+                d3.select(this).attr("r", 6);
+                d3.select("#tooltip").style("display", "none");
+            })
+            .on("click", function () {
+                const { data } = d3.select(this.parentNode).datum();
+                Swal.fire({
+                    title: data.name,
+                    text: data.description || "No additional information available.",
+                    icon: "info",
+                    confirmButtonText: "OK"
+                });
+            });
+
+        nodes.append("text")
+            .attr("dy", 3)
+            .attr("x", d => d.children ? -10 : 10)
+            .style("text-anchor", d => d.children ? "end" : "start")
+            .text(d => d.data.name);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+</html>
